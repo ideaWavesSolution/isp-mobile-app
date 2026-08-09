@@ -24,21 +24,14 @@ class LogInPortraitView extends StatefulWidget {
 
 class _LogInPortraitViewState extends State<LogInPortraitView> {
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final pinController = TextEditingController();
+  final ipController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    emailController.dispose();
-    pinController.dispose();
+    ipController.dispose();
+    passwordController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    emailController.text = 'test@gmail.com';
-    pinController.text = '1234';
   }
 
   Future<void> _onLogin() async {
@@ -46,8 +39,8 @@ class _LogInPortraitViewState extends State<LogInPortraitView> {
 
     context.read<LoginCubit>().login(
       LoginEntity(
-        email: emailController.text.trim(),
-        pin: pinController.text.trim(),
+        ip: ipController.text.trim(),
+        password: passwordController.text.trim(),
       ),
     );
   }
@@ -57,185 +50,166 @@ class _LogInPortraitViewState extends State<LogInPortraitView> {
     final theme = context.colors;
 
     return Scaffold(
-      backgroundColor: theme.background,
-      body: Stack(
-        children: [
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              height: 300,
-              width: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    theme.primary.withAlpha(38),
-                    theme.primary.withAlpha(0),
-                  ],
-                ),
-              ),
-            ),
+      backgroundColor: theme.primary,
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [theme.primary, theme.secondary],
           ),
-          SafeArea(
-            child: BlocListener<LoginCubit, LoginState>(
-              listener: (context, state) {
-                if (state.loginStatus.isFailure) {
-                  final error = (state.loginStatus as Failure).responseError;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        context.errorLocalization.responseError(error),
-                      ),
-                      backgroundColor: theme.error,
-                      behavior: SnackBarBehavior.floating,
+        ),
+        child: SafeArea(
+          child: BlocListener<LoginCubit, LoginState>(
+            listener: (context, state) {
+              if (state.loginStatus.isFailure) {
+                final error = (state.loginStatus as Failure).responseError;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      context.errorLocalization.responseError(error),
                     ),
-                  );
-                }
-                if (state.loginStatus.isSuccess) {
-                  context.router.replace(const HomeRoute());
-                }
-              },
-              child: Center(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppConstant.horizontalGap20,
+                    backgroundColor: theme.error,
+                    behavior: SnackBarBehavior.floating,
                   ),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 420),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(AppConstant.horizontalGap20),
-                          decoration: BoxDecoration(
-                            color: theme.primary.withAlpha(26),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            Icons.lock_person_rounded,
-                            size: 64,
-                            color: theme.primary,
-                          ),
+                );
+              }
+              if (state.loginStatus.isSuccess) {
+                context.router.replace(const DashboardRoute());
+              }
+            },
+            child: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppConstant.horizontalGap20,
+                ),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 420),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(AppConstant.horizontalGap20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(51),
+                          shape: BoxShape.circle,
                         ),
-                        Gap(AppConstant.verticalGap20),
-                        AppText.displayMedium(
-                          context.l10n.loginWelcomeTitle,
-                          style: context.textStyle.displaySmall.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: theme.onBackground,
-                          ),
+                        child: const Icon(
+                          Icons.wifi_tethering_rounded,
+                          size: 56,
+                          color: Colors.white,
                         ),
-                        Gap(AppConstant.verticalGap8),
-                        AppText.bodyMedium(
-                          context.l10n.loginSubtitle,
-                          style: context.textStyle.bodyMedium.copyWith(
-                            color: theme.onSurface.withAlpha(153),
-                          ),
-                        ),
-                        Gap(AppConstant.verticalGap20 * 1.5),
+                      ),
+                      Gap(AppConstant.verticalGap16),
+                      AppText.displaySmallBold(
+                        context.l10n.appName,
+                        color: Colors.white,
+                      ),
+                      Gap(AppConstant.verticalGap8 / 2),
+                      AppText.bodySmall(
+                        context.l10n.splashTagline,
+                        textAlign: TextAlign.center,
+                        color: Colors.white.withAlpha(217),
+                      ),
+                      Gap(AppConstant.verticalGap20 * 1.2),
 
-                        // Login Card
-                        Container(
-                          padding: EdgeInsets.all(
-                            AppConstant.horizontalGap20 + 4,
+                      // Login card
+                      Container(
+                        padding: EdgeInsets.all(
+                          AppConstant.horizontalGap20 + 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.surfaceElevated,
+                          borderRadius: BorderRadius.circular(
+                            AppConstant.borderRadius20,
                           ),
-                          decoration: BoxDecoration(
-                            color: theme.surfaceElevated,
-                            borderRadius: BorderRadius.circular(
-                              AppConstant.borderRadius20,
+                          boxShadow: [
+                            BoxShadow(
+                              color: theme.shadow.withAlpha(60),
+                              blurRadius: 24,
+                              offset: const Offset(0, 12),
                             ),
-                            border: Border.all(color: theme.border),
-                            boxShadow: [
-                              BoxShadow(
-                                color: theme.shadow.withAlpha(40),
-                                blurRadius: 24,
-                                offset: const Offset(0, 12),
+                          ],
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppText.displaySmallBold(
+                                context.l10n.loginWelcomeTitle,
+                                style: context.textStyle.headlineSmall,
+                              ),
+                              Gap(AppConstant.verticalGap4),
+                              AppText.bodyMedium(
+                                context.l10n.loginSubtitle,
+                                color: theme.onSurface.withAlpha(153),
+                              ),
+                              Gap(AppConstant.verticalGap20),
+                              AppTextField(
+                                controller: ipController,
+                                hint: context.l10n.ipHint,
+                                textFieldType: AppTextFieldType.none,
+                                prefixIcon: const Icon(Icons.dns_outlined),
+                                fillColor: theme.background,
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return context.l10n.ipRequired;
+                                  }
+                                  return null;
+                                },
+                              ),
+                              Gap(AppConstant.verticalGap16),
+                              AppTextField(
+                                controller: passwordController,
+                                hint: context.l10n.loginPasswordHint,
+                                textFieldType: AppTextFieldType.password,
+                                fillColor: theme.background,
+                              ),
+                              Gap(AppConstant.verticalGap20),
+                              BlocBuilder<LoginCubit, LoginState>(
+                                builder: (context, state) {
+                                  return SizedBox(
+                                    width: double.infinity,
+                                    child: PrimaryButton(
+                                      onPressed: _onLogin,
+                                      title: context.l10n.login,
+                                    ),
+                                  );
+                                },
+                              ),
+                              Gap(AppConstant.verticalGap16),
+                              const Divider(),
+                              Gap(AppConstant.verticalGap12),
+                              Center(
+                                child: AppText.bodySmall(
+                                  context.l10n.noAccountQuestion,
+                                  color: theme.onSurface.withAlpha(153),
+                                ),
+                              ),
+                              Gap(AppConstant.verticalGap8),
+                              Center(
+                                child: OutlinedButton(
+                                  onPressed: () => context.router.push(
+                                    const RegisterRoute(),
+                                  ),
+                                  child: AppText.bodyMediumBold(
+                                    context.l10n.registerNow,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AppText.labelLarge(
-                                  context.l10n.email,
-                                  style: context.textStyle.labelLarge.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Gap(AppConstant.verticalGap8),
-                                AppTextField(
-                                  controller: emailController,
-                                  hint: context.l10n.loginEmailHint,
-                                  textFieldType: AppTextFieldType.email,
-                                  fillColor: context.colors.background,
-                                ),
-                                Gap(AppConstant.verticalGap20),
-                                AppText.labelLarge(
-                                  context.l10n.pin,
-                                  style: context.textStyle.labelLarge.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Gap(AppConstant.verticalGap8),
-                                AppTextField(
-                                  controller: pinController,
-                                  hint: context.l10n.loginPinHint,
-                                  textFieldType: AppTextFieldType.number,
-                                  fillColor: context.colors.background,
-                                ),
-                                Gap(AppConstant.verticalGap20 * 1.5),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: PrimaryButton(
-                                    onPressed: _onLogin,
-                                    title: context.l10n.login,
-                                  ),
-                                ),
-                                Gap(AppConstant.verticalGap12),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: AppConstant.horizontalGap8,
-                                        vertical: AppConstant.verticalGap4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: theme.primary.withAlpha(23),
-                                        borderRadius: BorderRadius.circular(
-                                          AppConstant.borderRadius8,
-                                        ),
-                                      ),
-                                      child: AppText.labelSmall(
-                                        context.l10n.demoBadge,
-                                        color: theme.primary,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Gap(AppConstant.horizontalGap8),
-                                    Flexible(
-                                      child: AppText.bodySmall(
-                                        context.l10n.loginDemoCredentials,
-                                        color: theme.onSurface.withAlpha(140),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }

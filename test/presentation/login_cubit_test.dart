@@ -12,7 +12,7 @@ class MockLogger extends Mock implements Logger {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(const LoginEntity(email: '', pin: ''));
+    registerFallbackValue(const LoginEntity(ip: '', password: ''));
   });
 
   late MockLoginUseCase useCase;
@@ -23,7 +23,7 @@ void main() {
     logger = MockLogger();
   });
 
-  const input = LoginEntity(email: 'a@a.com', pin: '123456');
+  const input = LoginEntity(ip: '1.1.1.1', password: '123456');
 
   test('emits loading then success and keeps the submitted entity', () async {
     when(() => useCase.execute(any())).thenAnswer((_) async {});

@@ -43,7 +43,9 @@ class _DropdownFieldState<T> extends State<DropdownField<T>> {
   }
 
   InputBorder getBorder(Color color) => OutlineInputBorder(
-    borderRadius: BorderRadius.circular(widget.borderRadius ?? AppConstant.borderRadius8),
+    borderRadius: BorderRadius.circular(
+      widget.borderRadius ?? AppConstant.borderRadius8,
+    ),
     borderSide: BorderSide(color: color, width: 1.w),
   );
 

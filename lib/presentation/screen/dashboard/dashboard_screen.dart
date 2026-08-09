@@ -1,42 +1,26 @@
-import 'package:auto_route/auto_route.dart';
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
-import 'package:isp_mobile_app/presentation/route/app_router.gr.dart';
-import 'package:isp_mobile_app/presentation/screen/dashboard/dashboard_landscape.dart';
-import 'package:isp_mobile_app/presentation/screen/dashboard/dashboard_portrait.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:isp_mobile_app/core/injector/injector.dart';
 import 'package:isp_mobile_app/presentation/widgets/widgets.dart';
 
+import 'cubit/dashboard_cubit.dart';
+import 'dashboard_portrait_view.dart';
+
 @RoutePage()
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends Screen {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return AutoTabsRouter(
-      routes: const [
-        HomeRoute(),
-        WidgetsRoute(),
-        ArchitectureRoute(),
-        SettingsRoute(),
-      ],
-      builder: (context, child) {
-        return _ResponsiveDashboard(child: child);
-      },
+  Widget buildViewWrapper({required Widget child}) {
+    return BlocProvider<DashboardCubit>(
+      create: (context) => injector()..loadDashboard(),
+      child: child,
     );
   }
-}
-
-class _ResponsiveDashboard extends Screen {
-  final Widget child;
-
-  const _ResponsiveDashboard({required this.child});
 
   @override
   Widget buildMobilePortraitView(BuildContext context) {
-    return DashboardPortrait(child: child);
-  }
-
-  @override
-  Widget buildMobileLandscapeView(BuildContext context) {
-    return DashboardLandscape(child: child);
+    return const DashboardPortraitView();
   }
 }

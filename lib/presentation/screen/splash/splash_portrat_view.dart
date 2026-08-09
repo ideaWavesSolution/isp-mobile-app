@@ -62,7 +62,7 @@ class _SplashPortraitViewState extends State<SplashPortraitView>
 
     if (!mounted) return;
     if (hasToken) {
-      context.replaceRoute(const HomeRoute());
+      context.replaceRoute(const DashboardRoute());
     } else {
       context.replaceRoute(const LogInRoute());
     }
@@ -130,7 +130,7 @@ class _SplashPortraitViewState extends State<SplashPortraitView>
                         ],
                       ),
                       child: const Icon(
-                        Icons.rocket_launch_rounded,
+                        Icons.wifi_tethering_rounded,
                         size: 56,
                         color: Colors.white,
                       ),

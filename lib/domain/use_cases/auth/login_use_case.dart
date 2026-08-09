@@ -3,7 +3,7 @@ import 'package:isp_mobile_app/domain/entity/base/base_entity.dart';
 import 'package:isp_mobile_app/domain/repository/auth/auth_repository.dart';
 import 'package:isp_mobile_app/domain/use_cases/base/base_use_case.dart';
 
-@singleton
+@injectable
 class LoginUseCase with BaseUseCaseWithParams<void, LoginEntity> {
   LoginUseCase(this._authRepository);
 

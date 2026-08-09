@@ -20,4 +20,14 @@ class AuthRepositoryImpl extends AuthRepository {
       );*/
     await _secureStorage.setAccessToken("token");
   }
+
+  @override
+  Future<void> register({required RegistrationEntity inputModel}) async {
+    await _factory.createAuthDataSource().register(inputModel.toRequestModel());
+  }
+
+  @override
+  Future<void> logout() async {
+    await _secureStorage.clearAccessToken();
+  }
 }

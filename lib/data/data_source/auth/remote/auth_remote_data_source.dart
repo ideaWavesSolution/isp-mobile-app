@@ -17,4 +17,8 @@ abstract class AuthRemoteDataSource implements AuthDataSource {
   @override
   @POST('/login')
   Future<String> login(@Body() LoginRequestModel inputModel);
+
+  @override
+  @POST('/register')
+  Future<void> register(@Body() RegisterRequestModel inputModel);
 }

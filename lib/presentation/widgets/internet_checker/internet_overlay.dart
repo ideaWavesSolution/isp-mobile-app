@@ -53,7 +53,9 @@ class InternetOverlay extends StatelessWidget {
                                 size: AppConstant.horizontalGap20,
                               ),
                               Gap(AppConstant.horizontalGap12),
-                              AppText.labelLarge(context.l10n.noInternetConnection),
+                              AppText.labelLarge(
+                                context.l10n.noInternetConnection,
+                              ),
                             ],
                           ),
                         ),

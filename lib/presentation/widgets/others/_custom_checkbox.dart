@@ -1,5 +1,5 @@
+part of 'widgets.dart';
 
-part of'widgets.dart';
 class CustomCheckbox extends StatefulWidget {
   const CustomCheckbox({
     super.key,
@@ -103,6 +103,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
               WidgetSwiper(
                 key: const ValueKey("___CheckBox___"),
                 isInitial: !value,
+
                 /// You can change design from here
                 secondChild: Icon(Icons.check_box_rounded),
                 initialChild: Icon(Icons.check_box_outline_blank_rounded),

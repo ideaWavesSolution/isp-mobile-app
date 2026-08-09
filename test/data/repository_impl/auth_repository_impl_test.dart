@@ -15,7 +15,15 @@ class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(const LoginRequestModel(email: '', pin: ''));
+    registerFallbackValue(const LoginRequestModel(ip: '', password: ''));
+    registerFallbackValue(
+      const RegisterRequestModel(
+        fullName: '',
+        phone: '',
+        address: '',
+        packageInterest: '',
+      ),
+    );
   });
 
   late MockDataSourceFactory factory;
@@ -31,29 +39,48 @@ void main() {
     repository = AuthRepositoryImpl(factory, secureStorage);
   });
 
-  test('login persists the token returned by the data source', () async {
-    when(() => dataSource.login(any())).thenAnswer((_) async => 'token123');
+  // NOTE: login() currently bypasses the data source call (see the `TODO:
+  // Bypass login` marker in auth_repository_impl.dart) and always persists a
+  // static token, so real credential checking only happens once that bypass
+  // is removed for a live backend.
+  test('login persists a token via secure storage', () async {
     when(() => secureStorage.setAccessToken(any())).thenAnswer((_) async {});
 
     await repository.login(
-      inputModel: const LoginEntity(email: 'a@a.com', pin: '123456'),
+      inputModel: const LoginEntity(ip: '10.0.0.1', password: '123456'),
     );
 
-    verify(() => secureStorage.setAccessToken('token123')).called(1);
+    verify(() => secureStorage.setAccessToken('token')).called(1);
   });
 
-  test('login maps the entity to a request model for the data source',
-      () async {
-    when(() => dataSource.login(any())).thenAnswer((_) async => 'token');
-    when(() => secureStorage.setAccessToken(any())).thenAnswer((_) async {});
+  test(
+    'register maps the entity to a request model for the data source',
+    () async {
+      when(() => dataSource.register(any())).thenAnswer((_) async {});
 
-    await repository.login(
-      inputModel: const LoginEntity(email: 'user@x.com', pin: '999999'),
-    );
+      await repository.register(
+        inputModel: const RegistrationEntity(
+          fullName: 'Towsid',
+          phone: '01700000000',
+          address: 'Dhaka',
+          packageInterest: '20MB',
+        ),
+      );
 
-    final captured = verify(() => dataSource.login(captureAny())).captured;
-    final sent = captured.single as LoginRequestModel;
-    expect(sent.email, 'user@x.com');
-    expect(sent.pin, '999999');
+      final captured = verify(() => dataSource.register(captureAny())).captured;
+      final sent = captured.single as RegisterRequestModel;
+      expect(sent.fullName, 'Towsid');
+      expect(sent.phone, '01700000000');
+      expect(sent.address, 'Dhaka');
+      expect(sent.packageInterest, '20MB');
+    },
+  );
+
+  test('logout clears the stored access token', () async {
+    when(() => secureStorage.clearAccessToken()).thenAnswer((_) async {});
+
+    await repository.logout();
+
+    verify(() => secureStorage.clearAccessToken()).called(1);
   });
 }

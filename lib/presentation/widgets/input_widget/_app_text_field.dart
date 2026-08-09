@@ -138,7 +138,7 @@ class _AppTextFieldState extends State<AppTextField> {
             : _buildLeadingIcon(),
         prefixIconConstraints: const BoxConstraints(
           maxHeight: 48,
-          maxWidth: 48,
+          maxWidth: 56,
         ),
         suffixIconConstraints:
             (widget.textFieldType == AppTextFieldType.password ||

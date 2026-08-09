@@ -13,9 +13,7 @@ class PaginationList<T> {
     required this.isLoadingMore,
   });
 
-  factory PaginationList.empty({
-    int limit = 10,
-  }) {
+  factory PaginationList.empty({int limit = 10}) {
     return PaginationList<T>(
       items: const [],
       limit: limit,
@@ -26,10 +24,7 @@ class PaginationList<T> {
   }
 
   PaginationList<T> append(List<T> newItems) {
-    final updatedItems = [
-      ...items,
-      ...newItems,
-    ];
+    final updatedItems = [...items, ...newItems];
 
     return copyWith(
       items: updatedItems,

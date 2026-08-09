@@ -8,14 +8,14 @@ class AppRouter extends RootStackRouter {
     AutoRoute(page: SplashRoute.page, initial: true),
     AutoRoute(page: WebViewRoute.page),
     AutoRoute(page: LogInRoute.page),
-    AutoRoute(
-      page: DashboardRoute.page,
-      children: [
-        AutoRoute(page: HomeRoute.page, initial: true),
-        AutoRoute(page: WidgetsRoute.page),
-        AutoRoute(page: ArchitectureRoute.page),
-        AutoRoute(page: SettingsRoute.page),
-      ],
-    ),
+    AutoRoute(page: RegisterRoute.page),
+    AutoRoute(page: DashboardRoute.page),
+    AutoRoute(page: PackagesRoute.page),
+    AutoRoute(page: PaymentHistoryRoute.page),
+    AutoRoute(page: MakePaymentRoute.page),
+    AutoRoute(page: SupportTicketRoute.page),
+    AutoRoute(page: CreateTicketRoute.page),
+    AutoRoute(page: MediaRoute.page),
+    AutoRoute(page: MediaItemsRoute.page),
   ];
 }

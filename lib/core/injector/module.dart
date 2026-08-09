@@ -7,7 +7,6 @@ import 'package:isp_mobile_app/core/env/app_environment.dart';
 import 'package:isp_mobile_app/core/env/env.dart';
 import 'package:isp_mobile_app/data/data_source/base/backend_error_interceptor.dart';
 import 'package:isp_mobile_app/domain/enum/dio_client_type.dart';
-import 'package:isp_mobile_app/domain/repository/user/user_repository.dart';
 
 @module
 abstract class NetworkModule {
@@ -57,15 +56,4 @@ abstract class StorageModule {
 abstract class LoggerModule {
   @lazySingleton
   Logger get logger => Logger();
-}
-
-@module
-abstract class UserRepositoryModule {
-  // Development builds skip the subscription paywall, so `UserRepository`
-  // resolves straight to the cached repository instead of the subscription
-  // proxy (which is only registered for staging/production).
-  @Environment(AppEnvironment.development)
-  @lazySingleton
-  UserRepository cachedUserRepository(@Named('cached') UserRepository repo) =>
-      repo;
 }

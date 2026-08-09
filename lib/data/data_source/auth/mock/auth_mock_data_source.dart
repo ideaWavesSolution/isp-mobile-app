@@ -7,9 +7,14 @@ class AuthMockDataSource implements AuthDataSource {
   @override
   Future<String> login(LoginRequestModel inputModel) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    if (inputModel.email == 'test@gmail.com' && inputModel.pin == '1234') {
-      return 'mock_token_123';
+    if (inputModel.ip.trim().isEmpty || inputModel.password.trim().length < 4) {
+      throw Exception('Invalid IP or password');
     }
-    throw Exception('Invalid credentials');
+    return 'mock_token_123';
+  }
+
+  @override
+  Future<void> register(RegisterRequestModel inputModel) async {
+    await Future.delayed(const Duration(milliseconds: 700));
   }
 }

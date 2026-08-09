@@ -8,7 +8,7 @@ class MockAuthRepository extends Mock implements AuthRepository {}
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(const LoginEntity(email: '', pin: ''));
+    registerFallbackValue(const LoginEntity(ip: '', password: ''));
   });
 
   late MockAuthRepository repository;
@@ -20,7 +20,7 @@ void main() {
   });
 
   test('execute forwards the entity to repository.login', () async {
-    const entity = LoginEntity(email: 'a@a.com', pin: '123456');
+    const entity = LoginEntity(ip: '1.1.1.1', password: '123456');
     when(
       () => repository.login(inputModel: any(named: 'inputModel')),
     ).thenAnswer((_) async {});

@@ -4,6 +4,6 @@ part of 'login_cubit.dart';
 sealed class LoginState with _$LoginState {
   const factory LoginState({
     @Default(BaseStatus.initial()) BaseStatus loginStatus,
-    LoginEntity? loginEntity
+    LoginEntity? loginEntity,
   }) = _LoginState;
 }
